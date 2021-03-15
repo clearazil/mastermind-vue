@@ -19,7 +19,7 @@ Php
     * `php artisan ide-helper:models --nowrite`
 * Run `php artisan storage:link` to create the symlinks specified in config/filesystems.php
 
-Javascript
+Javascript/Css
 * Run `docker-compose exec node /bin/bash` to start using bash inside the node container
 * Run `npm install`
 

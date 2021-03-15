@@ -15,3 +15,8 @@ yarn-error.log
 # barryvdh/laravel-ide-helper
 .phpstorm.meta.php
 _ide_helper*
+
+# js and css files are compiled by webpack
+public/css/*
+public/js/*
+public/mix-manifest.json
