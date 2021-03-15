@@ -11,7 +11,7 @@ services:
     networks: [backend]
     volumes:
         [.:/app]
-    container_name: php_mastermind
+    container_name: php_mastermind-vue
 
   node:
     build:
@@ -24,7 +24,7 @@ services:
       [.:/app]
     ports:
       [1234:1234]
-    container_name: node_mastermind
+    container_name: node_mastermind-vue
     tty: true
 
   apache:
@@ -36,7 +36,7 @@ services:
       [8080:80]
     volumes:
       [.:/app]
-    container_name: apache_mastermind
+    container_name: apache_mastermind-vue
 
   mysql:
     image: mysql:5.7
@@ -49,7 +49,7 @@ services:
       MYSQL_USER: app
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
-    container_name: mysql_mastermind
+    container_name: mysql_mastermind-vue
 networks:
   frontend:
   backend:

@@ -10,4 +10,34 @@ $spacers: (
   6: ($spacer * 5)
 );
 
+.code-circle {
+    display: block;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border-color: beige;
+}
+
+.code-circle:hover {
+    border-color: rgba(0,0,0, 0.25);
+}
+
+.code-peg {
+    display: block;
+    width: 35px;
+    height: 35px;
+}
+
+.game-card {
+    width: 40rem;
+}
+
+.color-neutral {
+    background-color: beige;
+}
+
+.color-1 {
+    background-color: darkolivegreen;
+}
+
 @import "bootstrap/scss/bootstrap";
