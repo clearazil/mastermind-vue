@@ -11,7 +11,7 @@ Do the following to get started
 * Create a new .env file and copy the contents of .env.example into it
 * Run `php artisan key:generate` to set the Laravel application key
 * Run `php artisan migrate:fresh --seed` to reset and seed the database
-* Run the following commands, using barryvdh/laravel-ide-helper to create helper files for IDE autocompletion:
+* Run the following commands, using [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) to create helper files for IDE autocompletion:
     * `php artisan ide-helper:generate`
     * `php artisan ide-helper:meta`
     * `php artisan ide-helper:models --nowrite`
