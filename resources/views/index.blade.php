@@ -18,7 +18,45 @@
               <div class="container">
                 <div class="row">
                   <div class="col">
-                    <button class="code-circle color-neutral"></button>
+                    <button class="code-circle color-neutral" id="dropdownMenuOffset" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,0"></button>
+                    <ul class="dropdown-menu code-dropdown" aria-labelledby="dropdownMenuOffset">
+                      <li>
+                        <button class="code-circle color-0">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                      <li>
+                        <button class="code-circle color-1">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                      <li>
+                        <button class="code-circle color-2">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                      <li>
+                        <button class="code-circle color-3">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                      <li>
+                        <button class="code-circle color-4">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                      <li>
+                        <button class="code-circle color-5">
+                          <a class="dropdown-item" href="#">
+                          </button>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
                   <div class="col">
                     <button class="code-circle color-neutral"></button>
@@ -32,18 +70,18 @@
                   <div class="col">
                     <div class="row">
                       <div class="col">
-                        <span class="code-peg border rounded-circle color-neutral"></span>
+                        <span class="code-peg color-neutral"></span>
                       </div>
                       <div class="col">
-                        <span class="code-peg border rounded-circle color-neutral"></span>
+                        <span class="code-peg color-neutral"></span>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col pt-1">
-                        <span class="code-peg border rounded-circle color-neutral"></span>
+                        <span class="code-peg color-neutral"></span>
                       </div>
                       <div class="col pt-1">
-                        <span class="code-peg border rounded-circle color-neutral"></span>
+                        <span class="code-peg color-neutral"></span>
                       </div>
                     </div>
                   </div>
