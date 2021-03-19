@@ -18,6 +18,10 @@ $spacers: (
     border-style: solid;
 }
 
+.code-circle:disabled:hover {
+    border-color: rgba(0,0,0,0);
+}
+
 .code-circle:hover {
     border-color: rgba(0,0,0, 0.50);
 }
@@ -36,6 +40,10 @@ ul.code-dropdown {
 
 .code-dropdown a {
     padding: 0;
+}
+
+.default-cursor {
+    cursor: default;
 }
 
 .game-card {
