@@ -4,26 +4,7 @@
       <div class="card-body">
         <div class="container">
           <div class="row">
-            <div class="col" v-for="n in 4" v-bind:key="n">
-              <button
-                  :disabled="!isCurrentRow"
-                  class="code-circle color-neutral"
-                  id="dropdownMenuOffset"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  data-bs-offset="0,0">
-              </button>
-              <ul
-                class="dropdown-menu code-dropdown"
-                aria-labelledby="dropdownMenuOffset"
-              >
-                <li v-for="n in 6" v-bind:key="n">
-                  <button class="code-circle" :class="'color-' + (n - 1)">
-                    <a class="dropdown-item" href="#"></a>
-                  </button>
-                </li>
-              </ul>
-            </div>
+            <color-button v-for="n in 4" :key="n" :isCurrentRow="gameRow.isCurrentRow"></color-button>
             <div class="col">
               <div class="row">
                 <div class="col">
@@ -50,7 +31,13 @@
 </template>
 
 <script>
+
+import ColorButton from './ColorButton';
+
 export default {
-  props: ['number', 'isCurrentRow'],
+  props: ['gameRow'],
+  components: {
+    ColorButton,
+  },
 };
 </script>

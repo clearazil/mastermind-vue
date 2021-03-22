@@ -55,6 +55,18 @@ ul.code-dropdown {
     border-color: #F6eCF5;
 }
 
+.col ul.dropdown-menu {
+    top: inherit;
+}
+
+.outside {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+
 $codeColors: (
     0: #BFB2F3,
     1: #96CAF7,
