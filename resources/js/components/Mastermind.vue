@@ -8,7 +8,12 @@
         <h5 class="card-title">A code-breaking game agains the computer!</h5>
         <p class="card-text">Press the button below to begin.</p>
         <a href="#" class="btn btn-primary" @click="newGame">New game</a>
-        <game-row v-for="gameRow in gameRows" :key="gameRow.number" :gameRow="gameRow"></game-row>
+        <game-row
+          v-for="n in rowNumber"
+          :key="n"
+          :isCurrentRow="isCurrentRow((n - 1))"
+          @on-all-colors-chosen="allColorsChosen">
+        </game-row>
       </div>
     </div>
   </div>
@@ -21,28 +26,22 @@ export default {
   data() {
     return {
       name: 'Mastermind',
+      rowNumber: 12,
+      currentRow: 0,
     };
-  },
-  computed: {
-    gameRows: () => {
-      const gameRows = [];
-
-      for (let i = 0; i < 12; i++) {
-        gameRows.push({
-          number: i,
-          isCurrentRow: i === 0,
-        });
-      }
-
-      return gameRows;
-    },
   },
   components: {
     GameRow,
   },
   methods: {
+    isCurrentRow(number) {
+      return number === this.currentRow;
+    },
     newGame() {
       // TODO
+    },
+    allColorsChosen() {
+      this.currentRow += 1;
     },
   },
 };

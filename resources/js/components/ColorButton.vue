@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="col">
     <button
         :disabled="!isCurrentRow"
@@ -30,7 +30,7 @@ export default {
       colorClass: 'color-neutral',
     };
   },
-  props: ['isCurrentRow'],
+  props: ['isCurrentRow', 'buttonNumber'],
   methods: {
     showColorOptionsToggle() {
       if (this.showColorDropDown) {
@@ -41,6 +41,7 @@ export default {
     },
     pickColorButton(number) {
       this.colorClass = 'color-' + number;
+      this.$emit('on-color-chosen', this.buttonNumber);
       this.showColorDropDown = false;
     },
     away() {
