@@ -14,18 +14,18 @@
             <div class="col">
               <div class="row">
                 <div class="col">
-                  <span class="code-peg color-neutral"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][1].color"></span>
                 </div>
                 <div class="col">
-                  <span class="code-peg color-neutral"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][3].color"></span>
                 </div>
               </div>
               <div class="row">
                 <div class="col pt-1">
-                  <span class="code-peg color-neutral"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][2].color"></span>
                 </div>
                 <div class="col pt-1">
-                  <span class="code-peg color-neutral"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][4].color"></span>
                 </div>
               </div>
             </div>
@@ -38,10 +38,11 @@
 
 <script>
 
+import Mastermind from '../core/Mastermind';
 import ColorButton from './ColorButton';
 
 export default {
-  props: ['isCurrentRow'],
+  props: ['isCurrentRow', 'pegs', 'rowNumber'],
   data() {
     return {
       colorButtons: {
@@ -64,8 +65,10 @@ export default {
     ColorButton,
   },
   methods: {
-    colorChosen(buttonNumber) {
-      this.colorButtons[buttonNumber].chosen = true;
+    colorChosen(data) {
+      this.colorButtons[data.buttonNumber].chosen = true;
+
+      Mastermind.chooseColor(data.buttonNumber, data.colorNumber);
 
       if (this.isEveryColorChosen()) {
         this.$emit('on-all-colors-chosen');

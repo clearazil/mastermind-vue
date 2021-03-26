@@ -41,7 +41,7 @@ export default {
     },
     pickColorButton(number) {
       this.colorClass = 'color-' + number;
-      this.$emit('on-color-chosen', this.buttonNumber);
+      this.$emit('on-color-chosen', {buttonNumber: this.buttonNumber, colorNumber: number});
       this.showColorDropDown = false;
     },
     away() {

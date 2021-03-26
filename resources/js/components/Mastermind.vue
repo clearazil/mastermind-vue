@@ -12,6 +12,8 @@
           v-for="n in rowNumber"
           :key="n"
           :isCurrentRow="isCurrentRow((n - 1))"
+          :rowNumber="(n - 1)"
+          :pegs="pegs"
           @on-all-colors-chosen="allColorsChosen">
         </game-row>
       </div>
@@ -20,6 +22,7 @@
 </template>
 
 <script>
+import Mastermind from '../core/Mastermind';
 import GameRow from './GameRow';
 
 export default {
@@ -28,10 +31,29 @@ export default {
       name: 'Mastermind',
       rowNumber: 12,
       currentRow: 0,
+      pegs: {},
     };
   },
   components: {
     GameRow,
+  },
+  created() {
+    for (let i = 0; i < this.rowNumber; i++) {
+      this.pegs[i] = {
+        1: {
+          color: 'neutral',
+        },
+        2: {
+          color: 'neutral',
+        },
+        3: {
+          color: 'neutral',
+        },
+        4: {
+          color: 'neutral',
+        },
+      };
+    }
   },
   methods: {
     isCurrentRow(number) {
@@ -41,7 +63,13 @@ export default {
       // TODO
     },
     allColorsChosen() {
-      this.currentRow += 1;
+      Mastermind.pegColors().forEach((peg) => {
+        this.pegs[this.currentRow][peg.number].color = peg.color;
+      });
+
+      Mastermind.advance();
+
+      this.currentRow = Mastermind.currentRow;
     },
   },
 };
