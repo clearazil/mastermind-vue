@@ -17,12 +17,12 @@
                   <span class="code-peg" :class="'color-' + pegs[rowNumber][1].color"></span>
                 </div>
                 <div class="col">
-                  <span class="code-peg" :class="'color-' + pegs[rowNumber][3].color"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][2].color"></span>
                 </div>
               </div>
               <div class="row">
                 <div class="col pt-1">
-                  <span class="code-peg" :class="'color-' + pegs[rowNumber][2].color"></span>
+                  <span class="code-peg" :class="'color-' + pegs[rowNumber][3].color"></span>
                 </div>
                 <div class="col pt-1">
                   <span class="code-peg" :class="'color-' + pegs[rowNumber][4].color"></span>
