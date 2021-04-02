@@ -6,13 +6,15 @@ class Mastermind {
    *
    */
   constructor() {
-    this.newGame();
+    this._isGameStarted = false;
+    this._currentRow = 0;
   }
 
   /**
    *
    */
   newGame() {
+    this._isGameStarted = true;
     this.resetInput();
     this._code = this.generateNewCode();
 
@@ -52,8 +54,6 @@ class Mastermind {
       code[colorKey].positions.push(i);
     }
 
-    console.log(code);
-
     return code;
   }
 
@@ -63,14 +63,14 @@ class Mastermind {
    * @param {int} colorNumber
    */
   chooseColor(position, colorNumber) {
-    this._inputCode['color' + colorNumber].positions.push(position);
+    this._inputCode['color' + colorNumber].positions.push(parseInt(position));
   }
 
   /**
    *
    * @return {array}
    */
-  pegColors() {
+  keyPegColors() {
     const pegs = [];
 
     let result;
@@ -141,6 +141,15 @@ class Mastermind {
     this._currentRow += 1;
 
     this.resetInput();
+  }
+
+  /**
+   *
+   * @param {int} number
+   * @return {bool}
+   */
+  isCurrentRow(number) {
+    return this._isGameStarted && number === this._currentRow;
   }
 
   /**

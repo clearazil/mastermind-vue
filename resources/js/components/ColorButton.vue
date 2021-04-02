@@ -2,7 +2,7 @@
   <div class="col">
     <button
         :disabled="!isCurrentRow"
-        class="code-circle" :class="colorClass"
+        class="code-circle" :class="'color-' + color.color"
         aria-expanded="false"
         data-bs-offset="0,0"
         @click="showColorOptionsToggle">
@@ -27,10 +27,9 @@ export default {
   data() {
     return {
       showColorDropDown: false,
-      colorClass: 'color-neutral',
     };
   },
-  props: ['isCurrentRow', 'buttonNumber'],
+  props: ['rowNumber', 'isCurrentRow', 'buttonNumber', 'color'],
   methods: {
     showColorOptionsToggle() {
       if (this.showColorDropDown) {
@@ -40,8 +39,11 @@ export default {
       }
     },
     pickColorButton(number) {
-      this.colorClass = 'color-' + number;
-      this.$emit('on-color-chosen', {buttonNumber: this.buttonNumber, colorNumber: number});
+      this.$parent.$emit('on-color-chosen', {
+        buttonNumber: this.buttonNumber,
+        colorNumber: number,
+        rowNumber: this.rowNumber,
+      });
       this.showColorDropDown = false;
     },
     away() {

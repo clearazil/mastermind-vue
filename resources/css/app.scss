@@ -99,3 +99,8 @@ $codeColors: (
 }
 
 @import "bootstrap/scss/bootstrap";
+
+.card-active {
+    border-color: gray;
+    border-width: 2px;
+}
