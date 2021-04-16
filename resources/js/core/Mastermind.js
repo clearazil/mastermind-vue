@@ -6,8 +6,11 @@ class Mastermind {
    *
    */
   constructor() {
+    this._isGameEnded = false,
     this._isGameStarted = false;
     this._currentRow = 0;
+    this._isGameWon = false;
+    this._codeOutput = [];
   }
 
   /**
@@ -15,10 +18,38 @@ class Mastermind {
    */
   newGame() {
     this._isGameStarted = true;
+    this._isGameEnded = false;
     this.resetInput();
     this._code = this.generateNewCode();
 
     this._currentRow = 0;
+  }
+
+  /**
+   *
+   * @param {bool} won
+   */
+  endGame(won = false) {
+    this._isGameStarted = false;
+    this._isGameEnded = true;
+
+    this._isGameWon = won;
+  }
+
+  /**
+   *
+   * @return {bool}
+   */
+  isGameWon() {
+    return this._isGameWon;
+  }
+
+  /**
+   *
+   * @return {bool}
+   */
+  isGameLost() {
+    return !this._isGameLost;
   }
 
   /**
@@ -48,13 +79,25 @@ class Mastermind {
     };
 
     let colorKey;
+    let colorNumber;
+    this._codeOutput = [];
 
     for (let i = 0; i < 4; i++) {
-      colorKey = 'color' + Math.round(Math.random() * 5);
+      colorNumber = Math.round(Math.random() * 5);
+      this._codeOutput.push(colorNumber);
+      colorKey = 'color' + colorNumber;
       code[colorKey].positions.push(i);
     }
 
     return code;
+  }
+
+  /**
+   *
+   * @return {array}
+   */
+  codeOutput() {
+    return this._codeOutput;
   }
 
   /**
@@ -108,6 +151,12 @@ class Mastermind {
           blackPegs++;
         }
       }
+    }
+
+    if (redPegs === 4) {
+      this.endGame(true);
+    } else if (this._currentRow === 11) {
+      this.endGame(false);
     }
 
     let pegNumber = 1;

@@ -10,6 +10,10 @@ $spacers: (
   6: ($spacer * 5)
 );
 
+#mastermind {
+    margin-bottom: 400px;
+}
+
 .code-circle {
     display: block;
     width: 70px;
@@ -98,9 +102,15 @@ $codeColors: (
     }
 }
 
+
+
 @import "bootstrap/scss/bootstrap";
 
 .card-active {
     border-color: gray;
     border-width: 2px;
+}
+
+.modal {
+    display: block;
 }
