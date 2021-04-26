@@ -87,12 +87,12 @@ ul.code-dropdown {
   }
 
 $codeColors: (
-    0: #BFB2F3,
-    1: #96CAF7,
-    2: #9CDCAA,
-    3: #E5E1AB,
-    4: #F3C6A5,
-    5: #F8A3A8
+    1: #BFB2F3,
+    2: #96CAF7,
+    3: #9CDCAA,
+    4: #E5E1AB,
+    5: #F3C6A5,
+    6: #F8A3A8
 );
 
 @each $number, $color in $codeColors {
