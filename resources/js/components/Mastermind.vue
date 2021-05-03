@@ -58,17 +58,14 @@ export default {
     gameWon: (state) => state.game.state.won,
     codePegs: (state) => state.pegs.key,
     rowsTotal: (state) => state.row.total,
-    showModal: () => false,
+    showModal: (state) => state.showModal,
+    code: (state) => state.code.secretOutput,
   }),
   methods: {
-    showAnswer() {
-      // todo
-    },
-    closeModal() {
-      // todo
-    },
     ...mapMutations([
       'newGame',
+      'closeModal',
+      'showAnswer',
     ]),
   },
   components: {

@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    showModal: false,
     row: {
       current: 1,
       total: 12,
@@ -15,8 +16,6 @@ export default new Vuex.Store({
         won: false,
         lost: false,
       },
-      started: false,
-      ended: false,
     },
     code: {
       userInput: [],
@@ -30,13 +29,47 @@ export default new Vuex.Store({
   },
   mutations: {
     newGame(state) {
+      state.row.current = 1;
       state.game.state.started = true;
+      state.game.state.won = false;
+      state.game.state.lost = false;
+      state.showModal = false;
       state.pegs.code = JSON.parse(JSON.stringify(this.getters.pegs));
       state.pegs.key = JSON.parse(JSON.stringify(this.getters.pegs));
-      state.code.secret = this.getters.secretCode.secret;
-      state.code.secretOutput = this.getters.secretCode.secretOutput;
 
+      this.commit('setSecretCode');
       this.commit('resetInput');
+    },
+    setSecretCode: (state) => {
+      const code = {
+        secret: {},
+        secretOutput: [],
+      };
+
+      for (let i = 1; i <= 6; i++) {
+        code.secret['color' + i] = {positions: []};
+      }
+
+      let colorKey;
+      let colorNumber;
+
+      for (let i = 1; i <= 4; i++) {
+        colorNumber = Math.floor(Math.random() * (6 - 1) + 1);
+        code.secretOutput.push(colorNumber);
+        colorKey = 'color' + colorNumber;
+        code.secret[colorKey].positions.push(i);
+      }
+
+      state.code.secret = code.secret;
+      state.code.secretOutput = code.secretOutput;
+    },
+    showAnswer(state) {
+      state.game.state.started = false;
+      state.game.state.lost = true;
+      state.showModal = true;
+    },
+    closeModal(state) {
+      state.showModal = false;
     },
     pickColor(state, payload) {
       state.pegs.code[state.row.current].colors[payload.buttonNumber].color = payload.colorNumber;
@@ -97,9 +130,9 @@ export default new Vuex.Store({
       }
 
       if (redPegs === 4) {
-        state.game.won = true;
-      } else if (state.row.current === 11) {
-        state.game.lost = true;
+        state.game.state.won = true;
+      } else if (state.row.current === state.row.total) {
+        state.game.state.lost = true;
       }
 
       let pegNumber = 1;
@@ -125,6 +158,11 @@ export default new Vuex.Store({
       this.commit('keyPegColors');
       this.commit('resetInput');
       state.row.current += 1;
+
+      if (state.game.state.won || state.game.state.lost) {
+        state.showModal = true;
+        state.game.state.started = false;
+      }
     },
 
     resetInput(state) {
@@ -193,28 +231,6 @@ export default new Vuex.Store({
       }
 
       return pegs;
-    },
-    secretCode: (state) => {
-      const code = {
-        secret: {},
-        secretOutput: [],
-      };
-
-      for (let i = 1; i <= 6; i++) {
-        code.secret['color' + i] = {positions: []};
-      }
-
-      let colorKey;
-      let colorNumber;
-
-      for (let i = 1; i <= 4; i++) {
-        colorNumber = Math.floor(Math.random() * (6 - 1) + 1);
-        code.secretOutput.push(colorNumber);
-        colorKey = 'color' + colorNumber;
-        code.secret[colorKey].positions.push(i);
-      }
-
-      return code;
     },
   },
 });
