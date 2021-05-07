@@ -19,6 +19,8 @@ export default new Vuex.Store({
     },
     code: {
       userInput: [],
+      // output for showing the
+      // user the answer when lost
       secretOutput: [],
       secret: [],
     },
@@ -41,13 +43,11 @@ export default new Vuex.Store({
       this.commit('resetInput');
     },
     setSecretCode: (state) => {
-      const code = {
-        secret: {},
-        secretOutput: [],
-      };
+      state.code.secret = {};
+      state.code.secretOutput = [];
 
       for (let i = 1; i <= 6; i++) {
-        code.secret['color' + i] = {positions: []};
+        state.code.secret['color' + i] = {positions: []};
       }
 
       let colorKey;
@@ -55,13 +55,10 @@ export default new Vuex.Store({
 
       for (let i = 1; i <= 4; i++) {
         colorNumber = Math.floor(Math.random() * (6 - 1) + 1);
-        code.secretOutput.push(colorNumber);
+        state.code.secretOutput.push(colorNumber);
         colorKey = 'color' + colorNumber;
-        code.secret[colorKey].positions.push(i);
+        state.code.secret[colorKey].positions.push(i);
       }
-
-      state.code.secret = code.secret;
-      state.code.secretOutput = code.secretOutput;
     },
     showAnswer(state) {
       state.game.state.started = false;
@@ -72,14 +69,19 @@ export default new Vuex.Store({
       state.showModal = false;
     },
     pickColor(state, payload) {
-      state.pegs.code[state.row.current].colors[payload.buttonNumber].color = payload.colorNumber;
-      state.pegs.code[state.row.current].colors[payload.buttonNumber].chosen = true;
-      state.code.userInput['color' + payload.colorNumber].positions.push(parseInt(payload.buttonNumber));
+      const pegsInRow = state.pegs.code[state.row.current];
+      const button = pegsInRow.colors[payload.buttonNumber];
+
+      button.color = payload.colorNumber;
+      button.chosen = true;
+
+      const inputButton = state.code.userInput['color' + payload.colorNumber];
+      inputButton.positions.push(parseInt(payload.buttonNumber));
 
       let advance = false;
 
-      for (const number in state.pegs.code[state.row.current].colors) {
-        if (state.pegs.code[state.row.current].colors[number].chosen === false) {
+      for (const number in pegsInRow.colors) {
+        if (pegsInRow.colors[number].chosen === false) {
           advance = false;
           break;
         } else {
@@ -98,17 +100,18 @@ export default new Vuex.Store({
       let blackPegs = 0;
       let redPegs = 0;
 
-      let inputCodePositions;
-      let codePositions;
+      let inputPositions;
+      let secretPositions;
 
+      // compare the positions (per color) of the secret code with the user input code
       for (const [key, color] of Object.entries(state.code.userInput)) {
-        codePositions = state.code.secret[key].positions;
-        inputCodePositions = color.positions;
+        secretPositions = state.code.secret[key].positions;
+        inputPositions = color.positions;
         found = 0;
-        for (let j = 0; j < inputCodePositions.length; j++) {
+        for (let j = 0; j < inputPositions.length; j++) {
           // find a position in the input that matches a position in the code
-          result = codePositions.find((codePosition) => {
-            return codePosition === inputCodePositions[j];
+          result = secretPositions.find((secretPosition) => {
+            return secretPosition === inputPositions[j];
           });
 
           // found = red peg
@@ -118,14 +121,16 @@ export default new Vuex.Store({
           }
         }
 
+        let maxBlackPegs = secretPositions.length - found;
+
         // add a black peg if this input color is in the code, but
         // in the wrong position
-        if (inputCodePositions.length >= codePositions.length) {
-          // minus found, so an extra black peg won't be awarded for
-          // the correct guesses (red pegs)
-          for (let i = 0; i < (codePositions.length - found); i++) {
+        while (maxBlackPegs > 0) {
+          if ((inputPositions.length - found) >= maxBlackPegs) {
             blackPegs++;
           }
+
+          maxBlackPegs--;
         }
       }
 
@@ -166,26 +171,12 @@ export default new Vuex.Store({
     },
 
     resetInput(state) {
-      state.code.userInput = {
-        color1: {
-          positions: [],
-        },
-        color2: {
-          positions: [],
-        },
-        color3: {
-          positions: [],
-        },
-        color4: {
-          positions: [],
-        },
-        color5: {
-          positions: [],
-        },
-        color6: {
-          positions: [],
-        },
-      };
+      const userInput = {};
+      for (let i = 1; i <= 6; i++) {
+        userInput['color' + i] = {positions: []};
+      }
+
+      state.code.userInput = userInput;
     },
   },
   getters: {
@@ -197,18 +188,22 @@ export default new Vuex.Store({
       return false;
     },
     colorClass: (state) => (payload) => {
-      if (state.pegs.code[payload.rowNumber] !== undefined) {
-        return 'color-' + state.pegs.code[payload.rowNumber].colors[payload.buttonNumber].color;
+      if (state.pegs[payload.buttonType][payload.rowNumber] !== undefined) {
+        const button = state.pegs[payload.buttonType][payload.rowNumber].colors[payload.buttonNumber];
+        return 'color-' + button.color;
       }
 
       return 'color-neutral';
     },
-    keyPegColorClass: (state) => (payload) => {
-      if (state.pegs.key[payload.rowNumber] !== undefined) {
-        return 'color-' + state.pegs.key[payload.rowNumber].colors[payload.buttonNumber].color;
-      }
+    buttonColorClass: (state, getters) => (payload) => {
+      payload.buttonType = 'code';
 
-      return 'color-neutral';
+      return getters.colorClass(payload);
+    },
+    keyPegColorClass: (state, getters) => (payload) => {
+      payload.buttonType = 'key';
+
+      return getters.colorClass(payload);
     },
     pegs: (state) => {
       const pegs = [];

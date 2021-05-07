@@ -2,7 +2,7 @@
   <div class="col">
     <button
         :disabled="!isRowActive(rowNumber)"
-        class="code-circle" :class="colorClass({buttonNumber, rowNumber})"
+        class="code-circle" :class="buttonColorClass({buttonNumber, rowNumber})"
         aria-expanded="false"
         data-bs-offset="0,0"
         @click="showColorOptionsToggle">
@@ -35,7 +35,7 @@ export default {
   computed: {
     ...mapGetters([
       'isRowActive',
-      'colorClass',
+      'buttonColorClass',
     ]),
   },
   methods: {
