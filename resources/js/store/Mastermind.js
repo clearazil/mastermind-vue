@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
@@ -8,26 +8,26 @@ export default new Vuex.Store({
     showModal: false,
     row: {
       current: 1,
-      total: 12,
+      total: 12
     },
     game: {
       state: {
         started: false,
         won: false,
-        lost: false,
-      },
+        lost: false
+      }
     },
     code: {
       userInput: [],
       // output for showing the
       // user the answer when lost
       secretOutput: [],
-      secret: [],
+      secret: []
     },
     pegs: {
       code: [],
-      key: [],
-    },
+      key: []
+    }
   },
   mutations: {
     newGame(state) {
@@ -39,15 +39,15 @@ export default new Vuex.Store({
       state.pegs.code = JSON.parse(JSON.stringify(this.getters.pegs));
       state.pegs.key = JSON.parse(JSON.stringify(this.getters.pegs));
 
-      this.commit('setSecretCode');
-      this.commit('resetInput');
+      this.commit("setSecretCode");
+      this.commit("resetInput");
     },
-    setSecretCode: (state) => {
+    setSecretCode: state => {
       state.code.secret = {};
       state.code.secretOutput = [];
 
       for (let i = 1; i <= 6; i++) {
-        state.code.secret['color' + i] = {positions: []};
+        state.code.secret["color" + i] = { positions: [] };
       }
 
       let colorKey;
@@ -56,7 +56,7 @@ export default new Vuex.Store({
       for (let i = 1; i <= 4; i++) {
         colorNumber = Math.floor(Math.random() * (6 - 1) + 1);
         state.code.secretOutput.push(colorNumber);
-        colorKey = 'color' + colorNumber;
+        colorKey = "color" + colorNumber;
         state.code.secret[colorKey].positions.push(i);
       }
     },
@@ -68,15 +68,22 @@ export default new Vuex.Store({
     closeModal(state) {
       state.showModal = false;
     },
-    pickColor(state, payload) {
+    // todo: overweeg object destructuring (voor voorbeelden zie: https://dmitripavlutin.com/javascript-object-destructuring/)
+    // oude code: pickColor(state, payload) {
+    // nieuwe code:
+    pickColor(state, { colorNumber, buttonNumber }) {
       const pegsInRow = state.pegs.code[state.row.current];
-      const button = pegsInRow.colors[payload.buttonNumber];
+      // const button = pegsInRow.colors[payload.buttonNumber];
+      const button = pegsInRow.colors[buttonNumber];
 
-      button.color = payload.colorNumber;
+      button.color = colorNumber;
+      // button.color = payload.colorNumber;
       button.chosen = true;
 
-      const inputButton = state.code.userInput['color' + payload.colorNumber];
-      inputButton.positions.push(parseInt(payload.buttonNumber));
+      const inputButton = state.code.userInput["color" + colorNumber];
+      // const inputButton = state.code.userInput["color" + payload.colorNumber];
+      inputButton.positions.push(parseInt(buttonNumber));
+      // inputButton.positions.push(parseInt(payload.buttonNumber));
 
       let advance = false;
 
@@ -90,7 +97,7 @@ export default new Vuex.Store({
       }
 
       if (advance) {
-        this.commit('advance');
+        this.commit("advance");
       }
     },
     keyPegColors(state) {
@@ -110,7 +117,7 @@ export default new Vuex.Store({
         found = 0;
         for (let j = 0; j < inputPositions.length; j++) {
           // find a position in the input that matches a position in the code
-          result = secretPositions.find((secretPosition) => {
+          result = secretPositions.find(secretPosition => {
             return secretPosition === inputPositions[j];
           });
 
@@ -126,7 +133,7 @@ export default new Vuex.Store({
         // add a black peg if this input color is in the code, but
         // in the wrong position
         while (maxBlackPegs > 0) {
-          if ((inputPositions.length - found) >= maxBlackPegs) {
+          if (inputPositions.length - found >= maxBlackPegs) {
             blackPegs++;
           }
 
@@ -134,6 +141,7 @@ export default new Vuex.Store({
         }
       }
 
+      // todo: i.p.v. in mutation game state (won / lost) te bepalen kun je dit ook via een getter doen zodat deze altijd automatisch berekend wordt
       if (redPegs === 4) {
         state.game.state.won = true;
       } else if (state.row.current === state.row.total) {
@@ -142,9 +150,10 @@ export default new Vuex.Store({
 
       let pegNumber = 1;
 
+      // todo: onderstaande twee loops zijn identiek, refacoren naar 1 loop
       for (let i = 0; i < redPegs; i++) {
         state.pegs.key[state.row.current].colors[pegNumber] = {
-          color: 'red',
+          color: "red"
         };
 
         pegNumber++;
@@ -152,7 +161,7 @@ export default new Vuex.Store({
 
       for (let i = 0; i < blackPegs; i++) {
         state.pegs.key[state.row.current].colors[pegNumber] = {
-          color: 'black',
+          color: "black"
         };
 
         pegNumber++;
@@ -160,10 +169,11 @@ export default new Vuex.Store({
     },
 
     advance(state) {
-      this.commit('keyPegColors');
-      this.commit('resetInput');
+      this.commit("keyPegColors");
+      this.commit("resetInput");
       state.row.current += 1;
 
+      // todo: getters van maken zodat showModal en started automatisch bijgewerkt worden
       if (state.game.state.won || state.game.state.lost) {
         state.showModal = true;
         state.game.state.started = false;
@@ -173,59 +183,64 @@ export default new Vuex.Store({
     resetInput(state) {
       const userInput = {};
       for (let i = 1; i <= 6; i++) {
-        userInput['color' + i] = {positions: []};
+        userInput["color" + i] = { positions: [] };
       }
 
       state.code.userInput = userInput;
-    },
+    }
   },
   getters: {
-    isRowActive: (state) => (rowNumber) => {
+    isRowActive: state => rowNumber => {
       if (state.game.state.started) {
         return state.row.current === rowNumber;
       }
 
       return false;
     },
-    colorClass: (state) => (payload) => {
+    colorClass: state => payload => {
       if (state.pegs[payload.buttonType][payload.rowNumber] !== undefined) {
-        const button = state.pegs[payload.buttonType][payload.rowNumber].colors[payload.buttonNumber];
-        return 'color-' + button.color;
+        const button =
+          state.pegs[payload.buttonType][payload.rowNumber].colors[
+            payload.buttonNumber
+          ];
+        return "color-" + button.color;
       }
 
-      return 'color-neutral';
+      return "color-neutral";
     },
-    buttonColorClass: (state, getters) => (payload) => {
-      payload.buttonType = 'code';
+    buttonColorClass: (state, getters) => payload => {
+      payload.buttonType = "code";
 
       return getters.colorClass(payload);
     },
-    keyPegColorClass: (state, getters) => (payload) => {
-      payload.buttonType = 'key';
+    keyPegColorClass: (state, getters) => payload => {
+      payload.buttonType = "key";
 
       return getters.colorClass(payload);
     },
-    pegs: (state) => {
+    // todo: deze functie is in feite voor het wijzigen (initialiseren) van de VueX state. Zet daarom onderstaande code in een mutation. (bijv. newGame)
+    pegs: state => {
       const pegs = [];
       const colors = {};
 
       for (let i = 1; i <= 4; i++) {
         colors[i] = {
           chosen: false,
-          color: 'neutral',
+          color: "neutral"
         };
       }
 
+      // todo: offset by 1 probleem (state.pegs.code worden 13 ipv 12 stuks)
       for (let i = 1; i <= state.row.total; i++) {
         pegs[i] = {
           // simply assigning the color var to
           // the colors prop will be assigning
           // as reference, so create a new object
-          colors: JSON.parse(JSON.stringify(colors)),
+          colors: JSON.parse(JSON.stringify(colors))
         };
       }
 
       return pegs;
-    },
-  },
+    }
+  }
 });
